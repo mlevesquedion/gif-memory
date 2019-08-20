@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:gif_memory/square_bit_matrix.dart';
+import 'package:gif_memory/static_card_factory.dart';
+
+import 'card_game.dart';
 
 void main() => runApp(MyApp());
 
-const GRID_DIMENSION = 4;
+const GAME_DIMENSION = 4;
 const APP_TITLE = "Memory game";
 
 class MyApp extends StatelessWidget {
@@ -26,7 +28,7 @@ class MemoryGame extends StatefulWidget {
 }
 
 class _MemoryGameState extends State<MemoryGame> {
-  SquareBitMatrix _cards = SquareBitMatrix(GRID_DIMENSION);
+  CardGame game = CardGame(new StaticImageCardFactory(GAME_DIMENSION));
 
   @override
   Widget build(BuildContext context) {
@@ -35,24 +37,21 @@ class _MemoryGameState extends State<MemoryGame> {
         title: Text(APP_TITLE),
       ),
       body: GridView.count(
-        crossAxisCount: GRID_DIMENSION,
+        crossAxisCount: GAME_DIMENSION,
         children: _buildGrid(),
       ),
     );
   }
 
   _buildGrid() {
-    return List.generate(_cards.size(), (index) {
+    return List.generate(game.cards.length, (index) {
       return Center(
           child: MaterialButton(
-              onPressed: () => _flipCard(index),
-              child: Text(_cards.isSet(index) == true ? "True" : "False")));
-    });
-  }
-
-  _flipCard(int index) {
-    setState(() {
-      _cards.flip(index);
+              onPressed: () => setState(() {
+                    game.revealAt(index);
+                  }),
+              child: Text(
+                  game.isRevealedAt(index) ? game.faceAt(index) : "Hidden")));
     });
   }
 }
