@@ -14,9 +14,11 @@ description: A memory game with gifs.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.0 <3.0.0"
 
 dependencies:
+  dotenv: 1.0.0
+  giphy_client: 0.2.0
   flutter:
     sdk: flutter
 

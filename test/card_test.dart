@@ -1,35 +1,38 @@
-import "package:gif_memory/card.dart";
+import 'package:gif_memory/domain/gif_card.dart';
 import "package:test/test.dart";
 
-const String AN_IMAGE = "An image of a cat";
-
 void main() {
-  Card newCard;
-  Card revealedCard;
+  GifCard card;
+  GifCard revealedCard;
 
   setUp(() {
-    newCard = new Card(AN_IMAGE);
-    revealedCard = new Card(AN_IMAGE);
+    String url = "http://www.image.com/cat.gif";
+    card = new GifCard(url);
+    revealedCard = new GifCard(url);
     revealedCard.reveal();
   });
 
-  test("Cards start hidden", () {
-    Card card = new Card(AN_IMAGE);
-    expect(card.isHidden(), equals(true));
+  test("Cards are hidden at first", () {
+    expect(card.isHidden, equals(true));
   });
 
-  test("Revealing a card makes it no longer hidden", () {
-    newCard.reveal();
-    expect(newCard.isHidden(), equals(false));
+  test("A revealed card is not hidden", () {
+    card.reveal();
+    expect(card.isHidden, equals(false));
+  });
+
+  test("A hidden card is not revealed", () {
+    card.hide();
+    expect(card.isRevealed, equals(false));
   });
 
   test("Revealing a card makes it revealed", () {
-    newCard.reveal();
-    expect(newCard.isRevealed(), equals(true));
+    card.reveal();
+    expect(card.isRevealed, equals(true));
   });
 
   test("Hiding a card makes it hidden", () {
     revealedCard.hide();
-    expect(revealedCard.isHidden(), equals(true));
+    expect(revealedCard.isHidden, equals(true));
   });
 }
