@@ -1,8 +1,6 @@
 import 'package:gif_memory/domain/gif_card.dart';
 
 class GifCardCollection {
-  int secondsBeforeHiding;
-
   List<GifCard> _cards;
   List<GifCard> _pendingCards = new List();
 
@@ -10,49 +8,23 @@ class GifCardCollection {
 
   List<GifCard> get cards => _cards;
 
-  get pendingCardCount => _pendingCards.length;
-
-  void revealAt(int index) {
-    if (_pendingCards.length >= 2) {
-      return;
-    }
-    GifCard cardToReveal = _getCardAt(index);
-    if (cardToReveal.isRevealed) {
-      return;
-    }
-    revealCard(cardToReveal);
-  }
-
-  void revealCard(GifCard card) {
-    card.reveal();
-    _pendingCards.add(card);
-  }
-
   isRevealedAt(index) => _getCardAt(index).isRevealed;
 
-  _getCardAt(index) {
-    return _cards[index];
+  void revealAt(int index) {
+    GifCard cardToReveal = _getCardAt(index);
+    _revealCard(cardToReveal);
   }
 
   faceAt(int index) {
     return _getCardAt(index).gifUrl;
   }
 
-  void clearPending() {
-    _pendingCards.clear();
-  }
+  bool get shouldHidePendingCards =>
+      _hasTwoPendingCards() && _pendingCards[0] != _pendingCards[1];
 
-  bool shouldClearPending() {
-    return _pendingCards.length == 2;
-  }
-
-  bool shouldHideCards() {
-    return shouldClearPending() && _pendingCards[0] != _pendingCards[1];
-  }
-
-  hideAndClearPending() {
+  hidePendingCards() {
     _pendingCards.forEach((card) => card.hide());
-    clearPending();
+    _pendingCards.clear();
   }
 
   bool isOver() {
@@ -61,5 +33,23 @@ class GifCardCollection {
 
   void reset() {
     cards.forEach((c) => c.hide());
+  }
+
+  void _revealCard(GifCard card) {
+    card.reveal();
+    _pendingCards.add(card);
+    if (_pendingCardsAreEqual()) {
+      _pendingCards.clear();
+    }
+  }
+
+  _getCardAt(index) {
+    return _cards[index];
+  }
+
+  bool _hasTwoPendingCards() => _pendingCards.length == 2;
+
+  bool _pendingCardsAreEqual() {
+    return _hasTwoPendingCards() && _pendingCards[0] == _pendingCards[1];
   }
 }

@@ -23,6 +23,8 @@ class _MemoryGameState extends State<MemoryGame> {
   Future<List<GifCard>> _gifs;
   int _offset = 0;
 
+  bool _hidingPendingCards = false;
+
   _MemoryGameState(this._gifs);
 
   @override
@@ -69,12 +71,21 @@ class _MemoryGameState extends State<MemoryGame> {
   }
 
   _revealAt(int index) async {
-    setState(() => _game.revealAt(index));
-    if (_game.shouldHideCards()) {
-      Timer(DELAY_BEFORE_HIDING, () => setState(_game.hideAndClearPending));
-    } else if (_game.shouldClearPending()) {
-      setState(_game.clearPending);
+    if (_hidingPendingCards) {
+      setState(() => {});
+      return;
     }
+
+    setState(() => _game.revealAt(index));
+
+    if (_game.shouldHidePendingCards) {
+      _hidingPendingCards = true;
+      Timer(Duration(seconds: 1), () {
+        setState(() => _game.hidePendingCards());
+        _hidingPendingCards = false;
+      });
+    }
+
     if (_game.isOver()) {
       GameOverChoice choice = await showGameOverDialog(context);
       handleGameOverChoice(choice);
@@ -91,7 +102,6 @@ class _MemoryGameState extends State<MemoryGame> {
         break;
       case GameOverChoice.CHOOSE_NEW_GIF_TYPE:
         Navigator.pop(context);
-      // Go back to gif choosing menu
     }
   }
 
