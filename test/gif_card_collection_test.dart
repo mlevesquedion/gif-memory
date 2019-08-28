@@ -5,16 +5,16 @@ import "package:test/test.dart";
 import 'test_helpers.dart';
 
 void main() {
-  List<GifCard> pairedCairs = generateIndexedCards(8) + generateIndexedCards(8);
-  List<GifCard> allEqualCards = List.generate(10, (_) => GifCard("equal"));
-  List<GifCard> allDifferentCards = generateIndexedCards(10);
-
   GifCardCollection cardGame;
   GifCardCollection equalCardsGame;
   GifCardCollection differentCardsGame;
 
   setUp(() {
-    cardGame = new GifCardCollection(pairedCairs);
+    List<GifCard> pairedCards =
+        generateIndexedCards(8) + generateIndexedCards(8);
+    List<GifCard> allEqualCards = List.generate(10, (_) => GifCard("equal"));
+    List<GifCard> allDifferentCards = generateIndexedCards(10);
+    cardGame = new GifCardCollection(pairedCards);
     equalCardsGame = new GifCardCollection(allEqualCards);
     differentCardsGame = new GifCardCollection(allDifferentCards);
   });
