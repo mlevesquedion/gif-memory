@@ -1,4 +1,4 @@
-import 'package:gif_memory/domain/gif_card.dart';
+import 'package:flash_memory/domain/gif_card.dart';
 
 Map<T, int> countElements<T>(List<T> elements) {
   Map<T, int> counts = {};

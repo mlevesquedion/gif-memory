@@ -1,4 +1,4 @@
-import 'package:gif_memory/domain/gif_card.dart';
+import 'package:flash_memory/domain/gif_card.dart';
 
 class GifCardCollection {
   List<GifCard> _cards;
@@ -54,5 +54,13 @@ class GifCardCollection {
 
   bool _pendingCardsAreEqual() {
     return _hasTwoPendingCards() && _pendingCards[0] == _pendingCards[1];
+  }
+
+  void revealAll() {
+    cards.forEach((c) => c.reveal());
+  }
+
+  void hideAll() {
+    cards.forEach((c) => c.hide());
   }
 }

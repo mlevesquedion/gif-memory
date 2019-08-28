@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:flash_memory/network/gif_api.dart' as gif_api;
 import 'package:flutter/material.dart';
-import 'package:gif_memory/network/gif_api.dart' as gif_api;
 
 import '../constants.dart';
 import '../domain/gif_card.dart';
@@ -37,14 +37,21 @@ class _MemoryGameState extends State<MemoryGame> {
           child: FutureBuilder<List<GifCard>>(
             future: _gifs,
             builder: (context, snapshot) {
-              if (_game == null) {
-                _initializeGame();
-                return CircularProgressIndicator();
-              }
               if (snapshot.hasData) {
+                if (_game == null) {
+                  _initializeGame();
+                  return CircularProgressIndicator();
+                }
                 return _buildGrid();
               } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+                return Text(
+                  "An error has occured.\nTry again with a different kind of gif!",
+                  textAlign: TextAlign.center,
+                  style: new TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.redAccent),
+                );
               }
               return CircularProgressIndicator();
             },
@@ -54,6 +61,7 @@ class _MemoryGameState extends State<MemoryGame> {
 
   _buildGrid() {
     return GridView.count(
+        padding: EdgeInsets.all(10),
         crossAxisCount: GAME_DIMENSION,
         children: List.generate(_game.cards.length, (index) {
           return Center(
@@ -66,7 +74,7 @@ class _MemoryGameState extends State<MemoryGame> {
                       }),
                   child: _game.isRevealedAt(index)
                       ? Image.network(_game.faceAt(index))
-                      : Container(color: Colors.black)));
+                      : Container(color: Colors.black45)));
         }));
   }
 
@@ -118,6 +126,12 @@ class _MemoryGameState extends State<MemoryGame> {
   void _initializeGame() async {
     List<GifCard> cards = await _gifs;
     _game = GifCardCollection(cards);
+    _game.revealAll();
+    setState(() {});
+    Timer(Duration(seconds: 2), () {
+      setState(() => _game.hideAll());
+      _hidingPendingCards = false;
+    });
   }
 }
 

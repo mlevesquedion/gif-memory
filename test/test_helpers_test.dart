@@ -1,4 +1,4 @@
-import 'package:gif_memory/helpers.dart';
+import 'package:flash_memory/helpers.dart';
 import "package:test/test.dart";
 
 import 'test_helpers.dart';

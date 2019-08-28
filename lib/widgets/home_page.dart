@@ -7,24 +7,30 @@ class HomePage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Home'),
-        ),
-        body: Column(children: <Widget>[
-          Row(children: <Widget>[
-            Expanded(
+      appBar: AppBar(
+        title: Text("Flash Memory"),
+      ),
+      body: Column(children: <Widget>[
+        Center(
+            child: Container(
+                width: 300.0,
                 child: TextField(
                     autofocus: true,
                     decoration: InputDecoration(
                         border: InputBorder.none,
-                        hintText: 'What kind of gifs do you want?'),
-                    controller: _gifQueryController)),
-            RaisedButton(child: Text('Play'), onPressed: () => _play(context)),
-          ]),
-        ]));
+                        contentPadding: const EdgeInsets.all(40.0),
+                        hintText: "What kind of gifs do you want?"),
+                    controller: _gifQueryController))),
+        RaisedButton(child: Text("Play"), onPressed: () => _play(context)),
+      ]),
+    );
   }
 
   void _play(context) {
+    String gifQuery = _gifQueryController.text;
+    if (gifQuery.isEmpty) {
+      return;
+    }
     Navigator.push(
         context,
         MaterialPageRoute(

@@ -1,5 +1,5 @@
-import 'package:gif_memory/domain/gif_card.dart';
-import 'package:gif_memory/network/gif_api.dart';
+import 'package:flash_memory/domain/gif_card.dart';
+import 'package:flash_memory/network/gif_api.dart';
 import 'package:giphy_client/giphy_client.dart';
 import "package:test/test.dart";
 
