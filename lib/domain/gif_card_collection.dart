@@ -36,6 +36,9 @@ class GifCardCollection {
   }
 
   void _revealCard(GifCard card) {
+    if (_hasTwoPendingCards() || card.isRevealed) {
+      return;
+    }
     card.reveal();
     _pendingCards.add(card);
     if (_pendingCardsAreEqual()) {
